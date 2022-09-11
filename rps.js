@@ -2,10 +2,10 @@ let rps_radius
 let rps_vel
 let rps_count = 5
 let canvas_size = { x: 600, y: 600 }
+let willUpdate = true
 let rps_radius_slider
 let rps_vel_slider
 let game
-
 let listOfValues = (n) => {
     return [].concat(...Array(n).fill([1, 2, 3]));
 }
@@ -96,10 +96,10 @@ function setup() {
     let canvas = createCanvas(canvas_size.x, canvas_size.y)
     canvas.parent("game")
     textSize(20);
-    rps_radius_slider = createSlider(5, canvas_size.x/10,10)
+    rps_radius_slider = createSlider(5, canvas_size.x/10,canvas_size.x/10)
     rps_radius_slider.position(0, 60)
     
-    rps_vel_slider = createSlider(2, 8, 5)
+    rps_vel_slider = createSlider(2, 10, 7)
     rps_vel_slider.position(150, 60)
     game = createGame(rps_count)
 }
@@ -153,7 +153,14 @@ function draw() {
             }
 
         }
-        game[i].update()
+        if (willUpdate) {
+            
+            game[i].update()
+        }else{
+            game[i].draw()
+            noLoop()
+
+        }
     }
     reds.push(red_count)
     greens.push(green_count)
@@ -194,5 +201,6 @@ var interval = setInterval(function () {
 
     if (rgbc.map(x => {return x[0]}).includes(rps_count*3)) {
         clearInterval(interval)
+        willUpdate = false
     }
 }, 1000 / 60);
